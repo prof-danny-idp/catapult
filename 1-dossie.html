@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquivos do caso Catapult</title>
+<meta name="theme-color" content="#0B0B0B">
+<meta name="description" content="Arquivos do caso Catapult — C. S. Deborah. Sinopse e primeiro capítulo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --preto:#0B0B0B;
+  --papel:#ECE7DF;
+  --apagado:#8C867C;
+  --carimbo:#9B2C22;
+  --linha:rgba(236,231,223,.16);
+  --leitura:19px;
+  --maquina:"Special Elite","Courier New",monospace;
+  --etiqueta:"Courier Prime","Courier New",monospace;
+  --livro:"EB Garamond",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--preto);
+  color:var(--papel);
+  font-family:var(--etiqueta);
+  -webkit-font-smoothing:antialiased;
+  min-height:100svh;
+  overflow-x:hidden;
+  display:flex;
+  flex-direction:column;
+}
+/* granulado de papel velho */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:3;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.tela{display:none;padding:clamp(20px,6vw,40px) clamp(18px,5vw,32px) 0;max-width:640px;margin:0 auto}
+.tela.ativa{display:block;animation:entra .5s ease both}
+@keyframes entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- PORTARIA ---------- */
+#portaria{flex:1;display:none;flex-direction:column;justify-content:center;padding-bottom:26px}
+#portaria.ativa{display:flex}
+.pasta{border:1px solid var(--linha);border-top:3px solid var(--papel);padding:clamp(24px,7vw,38px) clamp(18px,6vw,32px);position:relative;background:rgba(255,255,255,.015)}
+.sobrescrito{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--apagado);margin:0 0 26px}
+h1.titulo{
+  font-family:var(--maquina);font-weight:400;
+  font-size:clamp(28px,8.6vw,44px);line-height:1.15;
+  margin:0 0 34px;text-transform:uppercase;letter-spacing:.02em;
+  text-shadow:0 0 14px rgba(236,231,223,.45),0 0 32px rgba(236,231,223,.16);
+  animation:neon 6s infinite steps(1,end);
+}
+h1.titulo .fraca{animation:morre 6s infinite steps(1,end)}
+@keyframes neon{
+  0%,3%{opacity:.35;text-shadow:none}
+  4%,6%{opacity:1}
+  7%{opacity:.4;text-shadow:none}
+  8%,46%{opacity:1}
+  47%{opacity:.25;text-shadow:none}
+  48%,72%{opacity:1}
+  73%,74%{opacity:.5;text-shadow:none}
+  75%,100%{opacity:1}
+}
+@keyframes morre{
+  0%,28%{opacity:1}
+  29%,33%{opacity:.12}
+  34%,60%{opacity:1}
+  61%{opacity:.12}
+  62%,100%{opacity:1}
+}
+label.campo{display:block;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--apagado);margin-bottom:12px}
+input#codigo{
+  width:100%;background:transparent;border:0;border-bottom:1px solid rgba(236,231,223,.4);
+  color:var(--papel);font-family:var(--maquina);font-size:24px;letter-spacing:.34em;
+  text-transform:uppercase;padding:8px 0 12px;outline:none;border-radius:0;
+}
+input#codigo:focus{border-bottom-color:var(--papel)}
+input#codigo::placeholder{color:rgba(236,231,223,.22);letter-spacing:.34em}
+button.acao{
+  margin-top:26px;width:100%;background:transparent;color:var(--papel);
+  border:1px solid var(--papel);padding:15px;font-family:var(--etiqueta);
+  font-size:13px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;
+  transition:background .2s,color .2s;
+}
+button.acao:hover,button.acao:focus-visible{background:var(--papel);color:var(--preto)}
+.erro{min-height:18px;margin:14px 0 0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--carimbo)}
+.tremor{animation:tremor .32s}
+@keyframes tremor{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ---------- ÍNDICE ---------- */
+.carimbo{
+  display:inline-block;border:2px solid var(--carimbo);color:var(--carimbo);
+  font-family:var(--maquina);font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  padding:7px 14px;transform:rotate(-4deg);margin-bottom:30px;opacity:.9;
+  animation:bate .45s cubic-bezier(.2,1.6,.4,1) both;
+}
+@keyframes bate{from{transform:rotate(-4deg) scale(2.2);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:.9}}
+h2.secao{font-family:var(--maquina);font-weight:400;font-size:20px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 22px}
+.doc{
+  display:block;width:100%;text-align:left;background:transparent;border:0;
+  border-top:1px solid var(--linha);padding:24px 34px 24px 0;color:var(--papel);
+  cursor:pointer;position:relative;
+}
+.doc:last-of-type{border-bottom:1px solid var(--linha)}
+.doc::after{content:"→";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--apagado);transition:transform .2s,color .2s}
+.doc:hover::after,.doc:focus-visible::after{transform:translate(6px,-50%);color:var(--papel)}
+.doc .num{display:block;font-size:11px;letter-spacing:.26em;color:var(--apagado);text-transform:uppercase;margin-bottom:9px}
+.doc .nome{display:block;font-family:var(--maquina);font-size:clamp(19px,5.4vw,24px);text-transform:uppercase;letter-spacing:.04em}
+.doc .meta{display:block;font-size:11px;letter-spacing:.16em;color:var(--apagado);text-transform:uppercase;margin-top:9px}
+
+/* ---------- LEITOR ---------- */
+.barra{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 0;background:var(--preto);border-bottom:1px solid var(--linha);margin-bottom:30px;
+}
+.barra button{background:transparent;border:1px solid var(--linha);color:var(--papel);cursor:pointer;
+  font-family:var(--etiqueta);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:9px 12px}
+.barra button:hover,.barra button:focus-visible{border-color:var(--papel)}
+.tamanho{display:flex;gap:6px;align-items:center}
+.tamanho span{font-size:10px;letter-spacing:.16em;color:var(--apagado);text-transform:uppercase;margin-right:2px}
+h3.tituloLeitura{font-family:var(--maquina);font-weight:400;font-size:clamp(24px,7vw,32px);
+  text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
+.subLeitura{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--apagado);margin:0 0 34px}
+#conteudo{font-family:var(--livro);font-size:var(--leitura);line-height:1.72;color:#E6E1D9}
+#conteudo p{margin:0 0 1.15em;text-align:left}
+#conteudo em{font-style:italic}
+#conteudo .cena{text-align:center;letter-spacing:.7em;color:var(--apagado);margin:2em 0}
+#conteudo .tec{font-family:var(--etiqueta);letter-spacing:.32em;color:var(--apagado);font-size:.82em;margin:1.6em 0}
+#conteudo p:first-of-type::first-letter{font-size:1em}
+
+footer{
+  max-width:640px;width:100%;margin:48px auto 0;padding:26px clamp(18px,5vw,32px) calc(30px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--linha);
+  font-size:11px;line-height:1.9;letter-spacing:.08em;color:var(--apagado);text-transform:uppercase;
+}
+footer strong{display:block;color:var(--papel);font-weight:400;margin-bottom:10px}
+:focus-visible{outline:2px solid var(--papel);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+footer .voltaHome{display:inline-block;margin-bottom:16px;color:inherit;text-decoration:none;
+  border-bottom:1px solid currentColor;padding-bottom:2px;letter-spacing:.16em}
+footer .voltaHome:hover,footer .voltaHome:focus-visible{color:#fff}
+</style>
+</head>
+<body>
+
+<section id="portaria" class="tela ativa">
+  <div class="pasta">
+    <p class="sobrescrito">Confidencial · Divisão de homicídios</p>
+    <h1 class="titulo">Arquivos do caso <span class="fraca">Catapult</span></h1>
+    <form id="form" autocomplete="off">
+      <label class="campo" for="codigo">Insira seu código</label>
+      <input id="codigo" name="codigo" type="text" inputmode="latin" autocapitalize="characters"
+             autocorrect="off" spellcheck="false" maxlength="12" placeholder="······" aria-describedby="erro">
+      <button class="acao" type="submit">Abrir arquivo</button>
+      <p class="erro" id="erro" role="alert"></p>
+    </form>
+  </div>
+  <p style="font-size:11px;letter-spacing:.16em;color:var(--apagado);text-transform:uppercase;margin-top:26px">
+    Acesso restrito a leitores autorizados
+  </p>
+</section>
+
+<section id="indice" class="tela">
+  <div class="carimbo">Acesso autorizado</div>
+  <h2 class="secao">Arquivos liberados</h2>
+  <button class="doc" data-abre="sinopse">
+    <span class="num">Doc. 01</span>
+    <span class="nome">Sinopse</span>
+    <span class="meta">1 min de leitura</span>
+  </button>
+  <button class="doc" data-abre="capitulo">
+    <span class="num">Doc. 02</span>
+    <span class="nome">Primeiro capítulo — degustação</span>
+    <span class="meta">12 min de leitura</span>
+  </button>
+</section>
+
+<section id="leitor" class="tela">
+  <div class="barra">
+    <button type="button" id="voltar">← Arquivos</button>
+    <div class="tamanho">
+      <span>Fonte</span>
+      <button type="button" data-passo="-1" aria-label="Diminuir tamanho da fonte">A−</button>
+      <button type="button" data-passo="1" aria-label="Aumentar tamanho da fonte">A+</button>
+    </div>
+  </div>
+  <h3 class="tituloLeitura" id="tituloLeitura"></h3>
+  <p class="subLeitura" id="subLeitura"></p>
+  <article id="conteudo"></article>
+</section>
+
+<footer>
+  <a class="voltaHome" href="index.html">← Outras opções</a><br>
+  <strong>Catapult</strong>
+  Todos os direitos reservados. Proibida a reprodução total ou parcial do conteúdo.<br>
+  C. S. Deborah (@debsautora)<br>
+  Editora Sunbee (@editorasunbee)
+</footer>
+
+<template id="tpl-sinopse"><p>Implacável. Indomável. Inalcançável.</p>
+<p>Tantos adjetivos atribuídos ao detetive Taylor, inspetor-chefe da
+polícia investigativa de Londres — um cargo que, a cada dia que passa,
+fica mais pesado nas costas de Andrew.</p>
+<p>Ele está exausto, e um período de férias nunca pareceu tão
+necessário. A última tentativa de tirá-las foi um fiasco: até tinha
+reservado alguns dias para a sua lua de mel…</p>
+<p>Mas o seu casamento foi cancelado horas antes de subir com o noivo no
+altar.</p>
+<p>Apesar dos olhares de simpatia que ganhou desde então, o detetive
+ainda coleciona muitos desafetos dentro e fora da corporação. Um deles é
+Derek, o agente de inteligência que trabalha junto à sua divisão com
+mais frequência do que Andrew gostaria.</p>
+<p>Eles são diferentes demais. Enquanto Derek se utiliza do instinto
+afiado e da própria força para se guiar nas missões, cada parte de
+Andrew é formada por cautela e uma capacidade analítica cruel.</p>
+<p>Em um dos trabalhos mais complexos que já fez, Derek está infiltrado
+como boxeador no Catapult, um circuito de lutas clandestinas. Ele levou
+meses para construir sua reputação, e está cada vez mais perto de
+descobrir um intrincado esquema de apostas ilegais.</p>
+<p>Mas toda sua missão fica comprometida quando um homem morre em uma de
+suas lutas. No ringue junto com ele, com um golpe de Derek que não
+deveria ter sido fatal.</p>
+<p>E, claro, a divisão de Andrew tinha que ser a designada para
+investigar o ocorrido. As férias nunca ficaram tão longe… e Derek e
+Andrew tão próximos.</p></template>
+<template id="tpl-capitulo"><p>— Merda!</p>
+<p>Andrew tirou o casaco com um movimento rápido, antes que o líquido
+derramado sobre a peça atravessasse o tecido e sujasse também a sua
+camisa.</p>
+<p>— Puta merda — esbravejou de novo, embolando o casaco, jogando-o no
+banco de trás do seu carro e fechando a porta com força.</p>
+<p>Colou a testa contra a lataria fria, puxando ar para os pulmões,
+tentando recobrar o controle. Apertou o punho esquerdo, amassando a
+latinha de refrigerante que havia estourado nele.</p>
+<p>Ele não sacudira a lata, o que significava que algum engraçadinho o
+fizera na loja de conveniência antes dele comprar, uma brincadeira que
+estava em alta entre adolescentes. Mas era melhor nem pensar muito
+naquilo; procurar um culpado só elevaria sua raiva.</p>
+<p>Raiva essa que não estava acostumado a sentir. Andrew não era alguém
+reativo. Aquela não era a forma com que lidava com as coisas: batendo
+portas, proferindo xingamentos. Porém, ultimamente…</p>
+<p>Qualquer coisa estava lhe fazendo explodir que nem a maldita lata de
+refrigerante.</p>
+<p>Uma risada ficou entalada em sua garganta. Mal estava lidando com
+bobagens, como esperava lidar com os casos de assassinatos que se
+empilhavam em sua mesa?</p>
+<p>Estremeceu com o frio londrino de março. Estava na hora de entrar no
+prédio, o que significava encarar os olhares de curiosidade de seus
+colegas.</p>
+<p><em>Congelar ali no estacionamento soava mais convidativo.</em></p>
+<p>Ele respirou fundo mais uma vez, ajeitando a manga de sua camisa,
+penteando seu cabelo cor de mel para trás. Endireitou a postura, pegou
+sua maleta no chão e caminhou até o prédio.</p>
+<p>Um dos seguranças o saudou. Andrew retribuiu o bom dia com um
+murmúrio, passando pela recepção com passos apressados em direção aos
+elevadores.</p>
+<p>— Detetive Taylor — uma policial o cumprimentou, entrando com ele no
+elevador. — Sexto andar?</p>
+<p>— Por favor, obrigado.</p>
+<p>Os dois dividiram um silêncio. Ela lançou olhares de relance na
+direção de Andrew, que manteve a atenção nos botões que acendiam à
+medida que subiam os andares.</p>
+<p>— Como estão as coisas, detetive?</p>
+<p>Sabia que por “coisas” entendia-se <em>casamento</em>, porque era o
+assunto que todos queriam tocar quando o encontravam.</p>
+<p>— Agitadas, temos muitos casos na divisão.</p>
+<p>— Mesmo com a ajuda da Inteligência?</p>
+<p>Andrew apertou os dentes.</p>
+<p>— O MI5 trabalha apenas em alguns deles.</p>
+<p>— Mesmo?</p>
+<p>— Só os que têm mídia. — Se Andrew fosse menos profissional, ele
+rolaria os olhos. — Há centenas de assassinatos lá fora que são
+entediantes e repetitivos. Esses o MI5 não faz questão de
+investigar.</p>
+<p>Ela abriu e fechou a boca, sem saber como responder.</p>
+<p>— Entendo… Ah, detetive, eu estava querendo te perguntar uma
+coisa.</p>
+<p>Andrew olhou-a de relance.</p>
+<p>— Sobre o trabalho?</p>
+<p>— Não, é que… Bom, minha irmã também precisou cancelar o casamento, e
+ela está precisando de ajuda para cancelar o <em>buffet</em>. Sabe, eles
+têm umas taxas bem abusivas… Como você fez?</p>
+<p>Um sorrisinho curto e afiado tomou o rosto de Andrew.</p>
+<p>— Não cancelei. Não existe direito de arrependimento se a empresa já
+está no evento.</p>
+<p>Com um "ting", o elevador anunciou a chegada no andar de Andrew. Ele
+desceu, não sem verificar se havia parado com segurança no seu destino,
+deixando a policial boquiaberta para trás.</p>
+<p>Ele não iria pensar sobre como sua resposta colocava mais lenha nas
+discussões a respeito do seu término. Caminhou até seu escritório, na
+outra extremidade do piso. Como inspetor-chefe, ele era o único com uma
+sala privativa naquele andar. Mal sentara na poltrona giratória — as
+cadeiras presidenciais revestidas em couro marrom eram seu maior prazer
+no escritório — quando seu telefone tocou. Ele checou o visor com uma
+careta.</p>
+<p>Semanalmente, ele recebia uma ligação de sua mãe, que sempre começava
+inocente o suficiente, com Nadia contando sobre o estado de saúde do seu
+pai.</p>
+<p>Aquela seguiu o mesmo roteiro.</p>
+<p>— Ele está sentindo menos falta de ar, está mais ativo... Semana
+passada foi ao parque todos os dias.</p>
+<p>Dois anos atrás, Nadia Somerset-Taylor deixara sua posição como
+âncora do telejornal mais assistido do país. A aposentadoria viera mais
+cedo do que ela planejara, pois havia escolhido passar mais tempo ao
+lado do pai de Andrew, David, depois que ele desenvolvera problemas
+cardíacos.</p>
+<p>Como tudo que ela fazia, as suas ligações nunca aconteciam por uma
+mera casualidade. Sempre havia alguma intenção por trás, e Andrew não
+tendia a gostar do que vinha escondido nas conversas casuais.</p>
+<p>Ele logo descobriu qual era a surpresa daquela manhã.</p>
+<p>Os ouvidos de Andrew eram mais apurados que a média. Então, quando a
+voz <em>dele</em> surgiu ao fundo, conseguiu identificá-la de
+imediato.</p>
+<p>— Mãe, pode explicar por que estou ouvindo a voz do Matteo?</p>
+<p>— Oh. — Ela hesitou. — Ele acabou de entrar no canal dois.</p>
+<p>Quietamente, Andrew pegou o controle, apontou para a pequena
+televisão suspensa em frente à sua mesa e apertou o botão de ligar.
+Passou pelos canais até chegar no que buscava.</p>
+<p><em>Masoquista</em>. Ele era a merda de um masoquista.</p>
+<p>A expressão de Andrew, que via o ex-noivo pela primeira vez em
+semanas, não mudou. Ele recusava-se a esboçar qualquer emoção, mesmo que
+ninguém fosse vê-lo.</p>
+<p>A câmera deu um <em>zoom</em> no rosto de Matteo Bianchi.</p>
+<p>— Sr. Deputado, pode nos contar melhor sobre o novo relatório do
+projeto <em>Net Zero</em>?</p>
+<p>Um microfone apareceu embaixo do queixo de Matteo, e ele sorriu
+aberto, dentes alinhados e brancos, na direção da repórter.</p>
+<p>— <em>Nosso objetivo continua sendo o de estabelecer o Reino Unido
+como líder global na economia de baixo carbono…</em></p>
+<p>— Ele parece saudável. — A voz de Nadia chiou no ouvido de Andrew,
+removendo sua atenção da televisão.</p>
+<p>Matteo estava mais bronzeado e havia deixado o cabelo crescer até o
+queixo.</p>
+<p>— Sim — Andrew ratificou a observação.</p>
+<p>— <em>Existe uma preocupação da população em relação ao custo das
+novas tecnologias…</em></p>
+<p>Na televisão, a jornalista continuava a fazer perguntas sobre o
+projeto governamental de sustentabilidade do qual Matteo era porta-voz.
+Andrew tinha tudo que ele estava dizendo decorado; quando estavam
+juntos, o noivo vivia falando sobre aquilo, porque era tão apaixonado no
+trabalho quanto Andrew. Foi o que sustentou o relacionamento deles por
+um tempo.</p>
+<p>Andrew pegou uma caneta da mesa, apertando o botão de ativar a ponta
+seguidas vezes.</p>
+<p class="tec">tec tec tec tec</p>
+<p>Pelo telefone, a mãe de Andrew fez mais uma de suas observações:</p>
+<p>— Ouvi dizer que o novo namorado dele é um <em>coach</em> de
+bem-estar.</p>
+<p>Andrew pausou os movimentos do polegar na caneta.</p>
+<p>— E o que isso quer dizer, exatamente?</p>
+<p>— Ele motiva as pessoas a mudarem o estilo de vida no Instagram.
+Tipo, a fazerem exercícios, comerem coisas saudáveis. Parece ser bem
+popular.</p>
+<p>Nem dois meses tinham se passado desde o cancelamento do casamento,
+mas Matteo já estava assumindo um novo relacionamento publicamente?</p>
+<p>E estaria tudo bem… Se a memória do término não estivesse assombrando
+Andrew todos os dias. Tudo que ele conseguia lembrar era daquela voz, a
+mesma que saía dos alto-falantes da televisão, dizendo-lhe o quanto ele
+era destrutivo.</p>
+<p>Dizendo que ele ia ficar sozinho, porque afastava tudo e todos.</p>
+<p>Andrew pegou o controle de novo e desligou a televisão.</p>
+<p>O silêncio pesado que se estabeleceu na linha despertou a voz
+arrependida da mãe:</p>
+<p>— Ah, eu não deveria ter te contado isso… — Ela hesitou, na esperança
+de uma réplica que não veio. — Andrew?</p>
+<p>— Preciso ir. Tenha um bom dia, mãe.</p>
+<p>Ele desligou sem esperar um bom dia de volta.</p>
+<p class="cena">* * *</p>
+<p>— Chefe?</p>
+<p>Andrew removeu a atenção do requerimento de férias que preenchia,
+para dali a dois meses. Ele encarou Robin, sua assistente e secretária,
+parada na soleira da porta.</p>
+<p>— O Sr. Jung está esperando na recepção.</p>
+<p>O detetive teve que se esforçar para conter uma careta. Era a última
+pessoa que ele desejava ver na sua manhã.</p>
+<p>No dia. Na semana. <em>No ano</em>.</p>
+<p>— Diga que não estou.</p>
+<p>Robin pendeu a cabeça para o lado, um fio de cabelo grisalho saiu de
+seu coque.</p>
+<p>— Não sei se dá pra fazer isso? Ele já está aqui… e meio que a
+reunião está na sua agenda.</p>
+<p>Andrew não tinha checado, o que era um péssimo hábito seu. Ele
+massageou as têmporas.</p>
+<p>— Droga. Tem muito tempo que está marcado?</p>
+<p>— Desde a semana passada.</p>
+<p>— Eu odeio a minha vida, Robin.</p>
+<p>A secretária conhecia Andrew desde que ele era um recruta, dez anos
+atrás. Era uma das poucas, senão a única pessoa, com quem Andrew tinha
+certo grau de conforto em ter por perto.</p>
+<p>— Vou dizer para ele entrar, então.</p>
+<p>Derek Jung era um agente da MI5, o serviço britânico de inteligência
+interna. O trabalho dele consistia em coletar informações para as
+missões dadas pela agência, utilizando-se dos mais diversos meios, desde
+o monitoramento de comunicações eletrônicas até infiltrações por meio de
+disfarces.</p>
+<p>Tais missões, na maioria das vezes, envolviam a investigação de algum
+homicídio, e por isso Derek trabalhava diretamente com o departamento de
+Andrew, na polícia, com frequência.</p>
+<p>Jung era a sua antítese em vários sentidos.</p>
+<p>Ao invés de vestir roupas sociais, como era o padrão de quem seguia
+carreiras como a deles, Derek estava sempre com jeans colados nas coxas
+grossas e uma jaqueta preta jogada por cima de uma camiseta escura. Seu
+cabelo preto curto carregava um aspecto molhado ou escondido em um boné,
+como era o caso naquela manhã.</p>
+<p>— Agente — Andrew o recebeu, sem lhe dar uma segunda olhada.</p>
+<p>— Logo não vai poder me chamar assim mais, sabe. Estou perto de virar
+oficial.</p>
+<p>Cruzando as mãos embaixo do queixo, Andrew repetiu:</p>
+<p>— O que o traz aqui, <em>agente</em>?</p>
+<p>— Posso me sentar antes?</p>
+<p>Prendendo a negativa na ponta da língua, o detetive apontou para a
+cadeira com a mão aberta.</p>
+<p>— Porra, que cadeira maravilhosa. — Derek afundou-se mais nela,
+sorrindo. — Não era essa na última vez que vim, era?</p>
+<p>Dando atenção para seus papéis na mesa, Andrew evitou os seus
+olhos.</p>
+<p>— Trocamos recentemente. Posso passar o número da loja, se quiser
+encomendar uma. — Andrew olhou por debaixo dos cílios. — Mas adianto que
+não foram baratas.</p>
+<p>Nem um músculo sequer ficou tensionado no corpo de Derek.</p>
+<p>— Então não valeria a pena, eu usaria muito pouco, sabe? Passar o dia
+com o traseiro acomodado não é do meu feitio.</p>
+<p>O lado esquerdo do lábio superior de Andrew se ergueu.</p>
+<p>— Claro. Deve ser melhor ficar brincando de espião por aí, fingindo
+estar num filme <em>blockbuster</em> ruim.</p>
+<p>— Eu gosto desses, são bons filmes para assistir com os amigos e a
+família. Mas acho que você prefere aqueles cults dos anos 50, em preto e
+branco, quase sem som… Aqueles <em>bem</em> entediantes.</p>
+<p>De fato, Andrew era aficionado nesses, mas ele não daria o gosto a
+Derek de concordar com ele.</p>
+<p>— Nós chamamos de clássicos. — Andrew finalmente deixou de mexer nos
+papéis. — O que você quer, agente?</p>
+<p>— <em>Quase</em> oficial…</p>
+<p>— O que você quer? — repetiu, dentes apertados.</p>
+<p>— Vim atualizar sobre o caso Wilson. — Derek tirou um saco
+<em>ziplock</em> transparente do bolso da jaqueta. Dentro, havia um
+chiclete rosa mascado. — Consegui uma amostra do DNA do Rob.</p>
+<p>— Ele está vivendo nas calçadas de <em>Oxford Street</em> agora,
+certo?</p>
+<p>Derek confirmou com a cabeça.</p>
+<p>Puxando a primeira gaveta de sua escrivaninha, Andrew pescou um par
+de luvas brancas, vestindo-as em seguida. O movimento elegante das mãos
+dele distraiu Derek por breves instantes.</p>
+<p>O desgraçado tinha mãos bonitas. Dedos finos, unhas bem feitas, um
+relógio caro preso no pulso ossudo. Ele tocava as coisas com uma
+delicadeza que era um tanto hipnotizante.</p>
+<p>— Você pegou isso do chão? Como tem certeza que é dele?</p>
+<p>A pergunta forçou Derek a sair dos devaneios.</p>
+<p>— Eu mesmo pedi para ele mascar. Ele cuspiu direto nesse saco.</p>
+<p>— E como conseguiu que ele fizesse isso? — Andrew fez uma careta.</p>
+<p>— Paguei ele. Falei que estava fazendo uma pesquisa sobre as melhores
+gomas de mascar. Tenho mais dois sacos desse no carro, se quiser.</p>
+<p>Andrew deu-lhe um olhar morto.</p>
+<p>— Você não tá falando sério.</p>
+<p>— Estou. Eu estava com uma prancheta e tudo mais.</p>
+<p>Os lábios de Andrew se entreabriram. Ele não sabia dizer se aquilo
+era genial ou completamente ridículo, mas o que sabia era que a amostra
+de DNA iria ajudar e muito o caso. Ocupou-se em remover o chiclete para
+um novo saco, que iria para o laboratório.</p>
+<p>— Dispenso os outros. Pode guardar de souvenir.</p>
+<p>Com um som abafado, Derek riu.</p>
+<p>— Era só isso? — Andrew perguntou, quando terminou. O som estalado
+dele removendo as luvas reverberou pela sala. Descartou-as sob os olhos
+atentos de Derek. — Pare de me olhar assim.</p>
+<p>— Assim, como? As pessoas olham pras outras.</p>
+<p>— Elas atiram nas outras também, e nem por isso é cabível fazer —
+Andrew rebateu, dentes apertados.</p>
+<p>— Até porque, no seu caso, ia ser difícil justificar como acidente
+uma segunda vez…</p>
+<p>— Supere isso logo. Foi anos atrás, e <em>foi</em> um acidente.</p>
+<p>— Aham. E ontem mesmo eu tomei chá com a rainha.</p>
+<p>Andrew pegou uma caneta e etiquetou o saco com o número do caso e o
+nome do suspeito. Depois, levantou-se e andou até uma prateleira no
+canto da sala, onde localizou o arquivo corrente do caso.</p>
+<p>— Acredite no que quiser — Andrew respondeu, parando atrás da mesa,
+de frente para Derek. — Mais alguma coisa?</p>
+<p>— Era só isso.</p>
+<p>Andrew ergueu as duas sobrancelhas.</p>
+<p>— Sinta-se à vontade para se retirar.</p>
+<p>Derek tinha começado a se mexer um pouco na cadeira, para frente e
+para trás, como se fosse uma de balanço. O encosto reclinável cedia com
+o peso de seu corpo.</p>
+<p>— Poxa, está tão confortável.</p>
+<p>— Você não tem que treinar?</p>
+<p>— Na verdade, tenho uma luta hoje. Não sabia que estava acompanhando
+tão de perto.</p>
+<p>Fazia quase seis meses que Derek trabalhava como um agente infiltrado
+em um circuito de lutas clandestinas, onde desempenhava o papel de
+boxeador. A missão não estava diretamente ligada a Andrew, mas ele e o
+restante do alto escalão recebiam informações gerais para cooperar com o
+MI5.</p>
+<p>— Não estou. — Andrew quase ruborizou-se, mas considerava tal reação
+abaixo dele. — Foi um chute.</p>
+<p>Derek levantou-se preguiçosamente.</p>
+<p>— Um dos bons.</p>
+<p>Ele ergueu os braços, se espreguiçando, o que fez a blusa marcar o
+contorno de seu torso.</p>
+<p>Na mão direita, Andrew ainda segurava a caneta que usara para
+escrever na etiqueta. Ele apertou o botão dela. O barulho acompanhou os
+passos de Derek até a saída.</p>
+<p class="tec">tec tec tec tec</p>
+<p>— Ah, Taylor? Tenho a recomendação de um filme para você mudar o
+repertório.</p>
+<p>Ausente de qualquer expressão no rosto, Andrew fechou o punho contra
+o tubo da caneta.</p>
+<p>— <em>Noiva em fuga</em>. É o meu tipo de clássico.</p>
+<p>Derek fechou a porta com um sorriso aberto.</p>
+<p>Mesmo já do lado de fora, ele pôde ouvir o barulho do plástico da
+caneta se partindo.</p></template>
+
+<script>
+(function(){
+  var CODIGO = "GOCMLF";
+  var telas = {portaria:document.getElementById('portaria'),indice:document.getElementById('indice'),leitor:document.getElementById('leitor')};
+  var erro = document.getElementById('erro');
+  var campo = document.getElementById('codigo');
+  var textos = {
+    sinopse:{titulo:'Sinopse',sub:'Doc. 01 · 1 min de leitura',html:document.getElementById('tpl-sinopse').innerHTML},
+    capitulo:{titulo:'Capítulo 1',sub:'Doc. 02 · Degustação · 12 min de leitura',html:document.getElementById('tpl-capitulo').innerHTML}
+  };
+  function mostra(nome){
+    for(var k in telas){telas[k].classList.toggle('ativa', k===nome);}
+    window.scrollTo(0,0);
+  }
+  document.getElementById('form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var v = (campo.value||'').trim().toUpperCase();
+    if(v === CODIGO){ erro.textContent=''; mostra('indice'); }
+    else{
+      erro.textContent = v ? 'Código inválido. Verifique e tente novamente.' : 'Digite o código de acesso.';
+      campo.classList.remove('tremor'); void campo.offsetWidth; campo.classList.add('tremor');
+    }
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.doc'),function(b){
+    b.addEventListener('click',function(){
+      var t = textos[b.dataset.abre];
+      document.getElementById('tituloLeitura').textContent = t.titulo;
+      document.getElementById('subLeitura').textContent = t.sub;
+      document.getElementById('conteudo').innerHTML = t.html;
+      mostra('leitor');
+    });
+  });
+  document.getElementById('voltar').addEventListener('click',function(){mostra('indice');});
+  var tam = 19;
+  Array.prototype.forEach.call(document.querySelectorAll('[data-passo]'),function(b){
+    b.addEventListener('click',function(){
+      tam = Math.min(30, Math.max(16, tam + Number(b.dataset.passo)*2));
+      document.documentElement.style.setProperty('--leitura', tam+'px');
+    });
+  });
+})();
+</script>
+</body>
+</html>
